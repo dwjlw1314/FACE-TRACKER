@@ -10,6 +10,7 @@ using namespace std;
 #include <iostream>
 #endif
 
+//max_cosine_distance = 0.2; nn_budget = 100
 tracker::tracker(/*NearNeighborDisMetric *metric,*/
 		float max_cosine_distance, int nn_budget,
 		float max_iou_distance, int max_age, int n_init)

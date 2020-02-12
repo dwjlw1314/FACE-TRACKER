@@ -34,6 +34,7 @@ public:
 	/*
 	 * args_nn_budget = 100
 	 * args_max_cosine_distance = 0.2
+	 * default model path "./tensorflow/mars-small128.pb"
 	 */
 	GS_VISIBILITY gsFaceTrackSDK(pDeepSortPar = nullptr);
 
@@ -51,12 +52,19 @@ public:
     /*!
      * \brief Get Faces Track ID,Rect
      * \param picture data, cv::Mat BGR format
-     * \param return result include <ID,DETECTBOX>;
+     * \param return result include <trackid,DETECTBOX,landmarks,faceid>;
+     * faceid 可以作为人脸检测框和跟踪框的唯一性比对
      * \return version string
      */
 	GS_VISIBILITY bool getFacesTrackResult(cv::Mat&, DETECTIONS&, RETURN_RESULT&);
 
+	/*
+	 * 年度汇报演示接口，获取tracker是否是剔除状态 UNdefine
+	 */
+	//GS_VISIBILITY void getFacesTrackStatus(TRACKER_STATUS&);
+
 private:
+	int m_time_since_update;
 	size_t tracker_num;
 	tracker *m_ptracker;
 	FeatureTensor *m_pFeatureTensor;

@@ -11,12 +11,17 @@
  * tlwh: topleft point & (w,h)
  * confidence: detection confidence.
  * feature: the rect's 128d feature.
+ * facepts: fine faces landmarks point
  */
 class DETECTION_ROW {
 public:
-    DETECTBOX tlwh; //np.float
+    DETECTBOX tlwh; //float
     float confidence; //float
-    FEATURE feature; //np.float32
+    FEATURE feature; //float32
+#ifdef USE_FACE_DETECT
+    size_t faceid;  //face mark_missed use, return to interface
+    FacePts facepts; //structure
+#endif
     DETECTBOX to_xyah() const;
     DETECTBOX to_tlbr() const;
 };

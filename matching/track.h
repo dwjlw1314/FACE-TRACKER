@@ -76,6 +76,12 @@ public:
     int _n_init;
     int _max_age;
     TrackState state;
+
+#ifdef USE_FACE_DETECT
+    int m_faceid;
+    FacePts m_facepts;
+#endif
+
 private:
     void featuresAppendOne(const FEATURE& f);
 };

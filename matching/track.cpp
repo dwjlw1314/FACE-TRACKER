@@ -14,6 +14,9 @@ Track::Track(KAL_MEAN& mean, KAL_COVA& covariance, int track_id, int n_init, int
 
     this->_n_init = n_init;
     this->_max_age = max_age;
+#ifdef USE_FACE_DETECT
+    this->m_faceid = 0;
+#endif
 }
 
 void Track::predit(KalmanFilter *kf)
@@ -45,6 +48,11 @@ void Track::update(KalmanFilter * const kf, const DETECTION_ROW& detection)
     if(this->state == TrackState::Tentative && this->hits >= this->_n_init) {
         this->state = TrackState::Confirmed;
     }
+#ifdef USE_FACE_DETECT
+    m_faceid = detection.faceid;
+    m_facepts = detection.facepts;
+#endif
+
 }
 
 void Track::mark_missed()

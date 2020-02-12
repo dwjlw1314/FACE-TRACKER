@@ -2,7 +2,6 @@
 #define TRACKER_H
 #include <vector>
 
-
 #include "kalmanfilter.h"
 #include "track.h"
 #include "../feature/model.h"

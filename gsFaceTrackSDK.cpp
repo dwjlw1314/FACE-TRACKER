@@ -13,12 +13,13 @@ gsFaceTrackSDK::gsFaceTrackSDK(pDeepSortPar param)
 	:tracker_num(0)
 {
 	//init default par member
-	DeepSortPar default_par {128, 100, 0.2,0.02,
+	DeepSortPar default_par {128, 100, 0, 0.2, 0.02,
 			     "./tensorflow/mars-small128.pb",
 				 "images", "features"};
 	if (!param)
 		param = &default_par;
 
+	m_time_since_update = param->time_since_update;
 	m_ptracker = new tracker(param->args_max_cosine_distance, param->args_nn_budget);
 	m_pFeatureTensor = new FeatureTensor(*param);
 }
@@ -42,8 +43,17 @@ bool gsFaceTrackSDK::getFacesTrackResult(Mat& frame, DETECTIONS& detections, RET
 
 	for(Track& track : m_ptracker->tracks)
 	{
-		if(!track.is_confirmed() || track.time_since_update > 1) continue;
-		result.push_back(std::make_pair(track.track_id, track.to_tlwh()));
+		RESULT_DATA data;
+		//time_since_update 预测次数
+		if(!track.is_confirmed() || track.time_since_update > m_time_since_update)
+			continue;
+		data.box = std::make_pair(track.track_id, track.to_tlwh());
+
+#ifdef USE_FACE_DETECT
+		data.pts = track.m_facepts;
+		data.faceid = track.m_faceid;
+#endif
+		result.push_back(data);
 	}
 //	char showMsg[10];
 //	for(unsigned int k = 0; k < detections.size(); k++)
